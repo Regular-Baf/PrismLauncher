@@ -19,14 +19,25 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QProcess>
+#include <QObject>
+
 #include <QDirIterator>
 #include <QIcon>
 #include "ui/themes/BrightTheme.h"
 #include "ui/themes/CustomTheme.h"
 #include "ui/themes/DarkTheme.h"
 #include "ui/themes/SystemTheme.h"
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "Application.h"
+#include <QCoreApplication>
+
+#include <QDebug>
+#include <QFileDialog>
 
 ThemeManager::ThemeManager(MainWindow* mainWindow)
 {
@@ -134,6 +145,49 @@ void ThemeManager::setApplicationTheme(const QString& name, bool initial)
         theme->apply(initial);
     } else {
         themeWarningLog() << "Tried to set invalid theme:" << name;
+    }
+}
+
+void ThemeManager::on_ImportCatpack_clicked()
+{
+    QString catpackFilePath = QFileDialog::getOpenFileName(this, QStringLiteral("Import Catpack"), "", QStringLiteral("Catpack Files (*.zip)"));
+    if (!catpackFilePath.isEmpty()) {
+        qInfo() << "Selected CatPack file path:" << catpackFilePath;
+        importLauncherCatpack(catpackFilePath);
+    } else {
+        qInfo() << "No CatPack file selected.";
+    }
+}
+
+void ThemeManager::importLauncherCatpack(const QString& themePath)
+{
+    QString themesFolderPath = QCoreApplication::applicationDirPath() + "/themes/";
+    QDir themesFolder(themesFolderPath);
+
+    if (!themePath.isEmpty()) {
+        // Validate Themes folder path
+        QFileInfo themeFileInfo(themePath);
+        if (!themeFileInfo.exists() || !themeFileInfo.isFile()) {
+            qWarning() << "Invalid theme file path.";
+            return;
+        }
+
+        // Extract the Catpack
+        QString extractedPath = themesFolder.absoluteFilePath("temp/");
+        QProcess unzipProcess;
+        unzipProcess.setProgram("unzip");
+        unzipProcess.setArguments(QStringList() << "-o" << "-d" << extractedPath);
+        unzipProcess.start(themePath);
+        unzipProcess.waitForFinished();
+
+        bool success = (unzipProcess.exitCode() == 0);
+
+        if (success) {
+            // Error message if the Catpack fails
+        } else {
+            qWarning() << "Failed to extract the CatPack.";
+            QMessageBox::critical(nullptr, QStringLiteral("Error"), QStringLiteral("Failed to extract the CatPack."));
+        }
     }
 }
 
