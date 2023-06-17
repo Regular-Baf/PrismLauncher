@@ -47,6 +47,10 @@ class ThemeManager {
     /// <returns></returns>
     static QString getCatImage(QString catName = "");
 
+    //Catpack-ery
+    void importLauncherCatpack(const QString& themePath);
+        void on_ImportCatpack_clicked();
+
    private:
     std::map<QString, std::unique_ptr<ITheme>> m_themes;
     MainWindow* m_mainWindow;
