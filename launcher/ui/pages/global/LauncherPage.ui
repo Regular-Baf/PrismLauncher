@@ -38,7 +38,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="featuresTab">
       <attribute name="title">
@@ -249,6 +249,19 @@
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <widget class="ThemeCustomizationWidget" name="themeCustomizationWidget" native="true"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ImportCatpack">
+            <property name="minimumSize">
+             <size>
+              <width>465</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Import CatPack</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -461,7 +474,24 @@
   <tabstop>fontPreview</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ImportCatpack</sender>
+   <signal>clicked()</signal>
+   <receiver>ImportCatpack</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>178</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <buttongroups>
   <buttongroup name="sortingModeGroup"/>
  </buttongroups>
